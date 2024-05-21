@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Student;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class StudentController extends Controller
 {
@@ -13,7 +14,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = QueryBuilder::for(Student::class)
+            ->allowedFilters(['first_name', 'last_name'])
+            ->allowedIncludes('user', 'semester')
+            ->get();
 
         return response()->json([
             'success' => true,

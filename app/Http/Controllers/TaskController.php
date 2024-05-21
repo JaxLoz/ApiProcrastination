@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
@@ -13,7 +14,17 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters([
+                'name', 
+                'description', 
+                'start_date', 
+                'due_date', 
+                'status_id', 
+                'student_id', 
+                'priority_id'])
+            ->allowedIncludes('status', 'student', 'priority')
+            ->get();
 
         return response()->json([
             'success' => true,

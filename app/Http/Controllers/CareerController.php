@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCareerRequest;
 use App\Http\Requests\UpdateCareerRequest;
 use App\Models\Career;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CareerController extends Controller
 {
@@ -13,7 +14,10 @@ class CareerController extends Controller
      */
     public function index()
     {
-        $careers = Career::all();
+        $careers = QueryBuilder::for(Career::class)
+            ->allowedFilters(['name', 'faculty_id'])
+            ->allowedIncludes('faculty')
+            ->get();
 
         return response()->json([
             'success' => true,

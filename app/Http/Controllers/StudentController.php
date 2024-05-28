@@ -15,7 +15,7 @@ class StudentController extends Controller
     public function index()
     {
         $students = QueryBuilder::for(Student::class)
-            ->allowedFilters(['first_name', 'last_name'])
+            ->allowedFilters(['first_name', 'last_name', 'user_id'])
             ->allowedIncludes('user', 'semester')
             ->get();
 

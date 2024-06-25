@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSemesterRequest;
 use App\Http\Requests\UpdateSemesterRequest;
 use App\Models\Semester;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SemesterController extends Controller
@@ -15,10 +16,12 @@ class SemesterController extends Controller
     public function index()
     {
         $semesters = QueryBuilder::for(Semester::class)
-            ->allowedFilters(['name', 'career_id'])
+            ->allowedFilters([
+                'name',
+                AllowedFilter::exact('career_id')
+            ])
             ->allowedIncludes('career')
             ->get();
-
             
         return response()->json([
             'success' => true,
